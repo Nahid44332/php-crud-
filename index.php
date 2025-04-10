@@ -28,6 +28,8 @@
   </div>
 </nav>
 <div class="container mt-5">
+<a href="add.php" class="btn btn-success mb-3">+ Add New Member</a>
+  <h1>Member</h1>
 <table class="table">
   <thead>
     <tr>
@@ -50,19 +52,20 @@
             $phone = $row['phone'];
             $email = $row['email'];
             $address = $row['address'];
-        echo 
-        '<tr>
-          <th scope="row">'.$id.'</th>
-          <td>'.$name.'</td>
-          <td>'.$phone.'</td>
-          <td>'.$email.'</td>
-          <td>'.$address.'</td>
-          <td>
-            <a href="#" class="btn btn-primary">Edit</a>
-            <a href="#" class="btn btn-danger">Delete</a>
-          </td>
-        </tr>';
-        $Serial++;
+            echo '
+            <tr>
+              <th scope="row">'.$Serial.'</th>
+              <td>'.$name.'</td>
+              <td>'.$phone.'</td>
+              <td>'.$email.'</td>
+              <td>'.$address.'</td>
+              <td>
+                <a href="profile.php?id='.$id.'" class="btn btn-info">Profile</a>
+                <a href="edit.php?id='.$id.'" class="btn btn-primary btn-sm">Edit</a>
+                <a href="delete.php?id='.$id.'" class="btn btn-danger btn-sm" onclick="return confirm(\'Are you sure you want to delete this?\')">Delete</a>
+              </td>
+            </tr>';            
+            $Serial++;
         }
     ?>
   </tbody>
