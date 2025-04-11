@@ -1,76 +1,86 @@
 <?php
-    include 'config.php';
+include 'config.php';
 ?>
-<!doctype html>
+
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Bootstrap demo</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-SgOJa3DmI69IUzQ2PVdRZhwQ+dy64/BUtbMJw1MZ8t5HZApcHrRKUc4W0kG879m7" crossorigin="anonymous">
-  </head>
-  <body>
-  <nav class="navbar navbar-expand-lg bg-body-tertiary">
-  <div class="container-fluid">
-    <a class="navbar-brand" href="#">IT Batch</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-        <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="#">Home</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">Link</a>
-        </li>
-    </div>
-  </div>
-</nav>
+<head>
+  <meta charset="UTF-8">
+  <title>Member</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+</head>
+<body>
+
 <div class="container mt-5">
-<a href="add.php" class="btn btn-success mb-3">+ Add New Member</a>
+  <a href="add.php" class="btn btn-success mb-3">+ Add New Member</a>
+  <input type="text" id="searchInput" class="form-control form-control-lg mb-3" placeholder="🔍 Search by name, email or phone...">
   <h1>Member</h1>
-<table class="table">
-  <thead>
-    <tr>
-      <th scope="col">SL</th>
-      <th scope="col">Name</th>
-      <th scope="col">Phone</th>
-      <th scope="col">Email</th>
-      <th scope="col">Address</th>
-      <th scope="col">Action</th>
-    </tr>
-  </thead>
-  <tbody>
-  <?php
-        $query = 'SELECT * FROM mamber';
-        $mamber = mysqli_query($conn, $query);
-        $Serial = 1;
-        while($row = mysqli_fetch_assoc($mamber)){
+
+  <table class="table">
+    <thead>
+      <tr>
+        <th>SL</th>
+        <th>Name</th>
+        <th>Phone</th>
+        <th>Email</th>
+        <th>Address</th>
+        <th>Action</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      <?php
+        $query = "SELECT * FROM mamber";
+        $member = mysqli_query($conn, $query);
+        $serial = 1;
+
+        if ($member && mysqli_num_rows($member) > 0) {
+          while($row = mysqli_fetch_assoc($member)) {
             $id = $row['id'];
             $name = $row['name'];
             $phone = $row['phone'];
             $email = $row['email'];
             $address = $row['address'];
-            echo '
-            <tr>
-              <th scope="row">'.$Serial.'</th>
-              <td>'.$name.'</td>
-              <td>'.$phone.'</td>
-              <td>'.$email.'</td>
-              <td>'.$address.'</td>
+            $status = $row['status'];
+
+            echo "<tr>
+              <th scope='row'>{$serial}</th>
+              <td>{$name}</td>
+              <td>{$phone}</td>
+              <td>{$email}</td>
+              <td>{$address}</td>
               <td>
-                <a href="profile.php?id='.$id.'" class="btn btn-info">Profile</a>
-                <a href="edit.php?id='.$id.'" class="btn btn-primary btn-sm">Edit</a>
-                <a href="delete.php?id='.$id.'" class="btn btn-danger btn-sm" onclick="return confirm(\'Are you sure you want to delete this?\')">Delete</a>
+                <a href='profile.php?id={$id}' class='btn btn-info btn-sm'>Profile</a>
+                <a href='edit.php?id={$id}' class='btn btn-primary btn-sm'>Edit</a>
+                <a href='delete.php?id={$id}' class='btn btn-danger btn-sm' onclick='return confirm(\"Are you sure you want to delete this?\")'>Delete</a>
               </td>
-            </tr>';            
-            $Serial++;
+              <td>
+                ". ($status == 'Active' 
+                  ? "<a href='toggle.php?id={$id}&status=Inactive' class='btn btn-warning btn-sm'>Inactive</a>"
+                  : "<a href='toggle.php?id={$id}&status=Active' class='btn btn-success btn-sm'>Active</a>") ."
+              </td>
+            </tr>";
+            $serial++;
+          }
+        } else {
+          echo "<tr><td colspan='7' class='text-center'>No members found!</td></tr>";
         }
-    ?>
-  </tbody>
-</table>
+      ?>
+    </tbody>
+  </table>
 </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js" integrity="sha384-k6d4wzSIapyDyv1kpU366/PK5hCdSbCRGRCMv+eplOQJWyd1fbcAu9OCUj5zNLiq" crossorigin="anonymous"></script>
-  </body>
+<script>
+  const searchInput = document.getElementById('searchInput');
+  searchInput.addEventListener('keyup', function () {
+    const filter = searchInput.value.toLowerCase();
+    const rows = document.querySelectorAll("table tbody tr");
+
+    rows.forEach(row => {
+      const text = row.textContent.toLowerCase();
+      row.style.display = text.includes(filter) ? "" : "none";
+    });
+  });
+</script>
+
+</body>
 </html>

@@ -10,7 +10,7 @@
 <div class="container mt-5">
     <div class="card shadow-lg rounded-4">
         <div class="card-header bg-primary text-white">
-            <h3 class="mb-0">Add New Student</h3>
+            <h3 class="mb-0">Add New Member</h3>
         </div>
         <div class="card-body">
             <form action="" method="POST">
@@ -30,7 +30,7 @@
                     <label for="address" class="form-label">Address:</label>
                     <input type="text" name="address" class="form-control" required>
                 </div>
-                <button type="submit" name="submit" class="btn btn-success">Add Student</button>
+                <button type="submit" name="submit" class="btn btn-success">Add Member</button>
                 <a href="index.php" class="btn btn-secondary">Back</a>
             </form>
         </div>
